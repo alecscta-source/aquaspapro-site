@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Tehnic — AquaSpa Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --teal:#00a8bc;--teal-light:#00c8dc;--teal-deep:#007a8a;--teal-pale:#e8f6f8;
+  --gold:#c9a96e;--gold-light:#e8c98a;--green:#00c87a;--violet:#7c5cbf;--amber:#ff9022;--coral:#ff6b6b;
+  --white:#ffffff;--off-white:#f0f8fa;
+  --dark:#0a1e28;--mid:#1a3a45;--muted:#5a8a95;
+  --serif:'EB Garamond',Georgia,serif;--mono:'DM Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--off-white);color:var(--dark);font-family:var(--sans);font-weight:300;cursor:none;overflow-x:hidden;}
+#cursor{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--green);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;}
+#cursor-ring{position:fixed;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(0,200,122,0.4);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+body.hovering #cursor{width:16px;height:16px;background:#00e890;}
+body.hovering #cursor-ring{width:52px;height:52px;border-color:var(--green);}
+#water-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:0.45;}
+#overlay{position:fixed;inset:0;z-index:1;background:linear-gradient(180deg,rgba(240,248,250,0.9) 0%,rgba(235,248,240,0.75) 50%,rgba(240,248,250,0.92) 100%);pointer-events:none;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(255,255,255,0.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,200,122,0.15);}
+nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);animation:scanH 4s ease-in-out infinite;}
+@keyframes scanH{0%,100%{opacity:.4;}50%{opacity:1;}}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-text{font-family:var(--serif);font-style:italic;font-size:20px;}
+.logo-text .a{color:var(--teal);}.logo-text .p{color:var(--teal-light);font-size:16px;}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-links a{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--green);}
+.nav-cta{color:var(--white)!important;background:var(--green);padding:8px 18px;transition:background .3s!important;border-radius:2px;}
+.nav-cta:hover{background:#00e890!important;}
+
+main{position:relative;z-index:10;padding-top:72px;min-height:100vh;padding-bottom:60px;}
+
+/* HERO */
+.page-hero{padding:44px 48px 36px;border-bottom:1px solid rgba(0,200,122,0.1);}
+.breadcrumb{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--teal-deep);margin-bottom:14px;display:flex;align-items:center;gap:8px;opacity:.7;}
+.breadcrumb a{color:var(--teal-deep);text-decoration:none;transition:color .3s;}
+.breadcrumb a:hover{color:var(--green);}
+.breadcrumb span{color:rgba(0,200,122,0.3);}
+.page-title{font-family:var(--serif);font-style:italic;font-size:clamp(36px,5vw,64px);font-weight:300;line-height:1.08;color:var(--dark);}
+.page-title em{font-style:normal;color:var(--green);}
+.page-sub{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.7;max-width:500px;}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:8px;padding:24px 48px;border-bottom:1px solid rgba(0,200,122,0.08);flex-wrap:wrap;}
+.filter-tab{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border:1px solid rgba(0,168,188,0.2);color:var(--muted);cursor:none;transition:all .2s;background:rgba(255,255,255,0.6);border-radius:2px;}
+.filter-tab:hover{border-color:var(--green);color:var(--green);background:rgba(0,200,122,0.05);}
+.filter-tab.active{background:var(--green);color:var(--white);border-color:var(--green);}
+
+/* BLOG GRID */
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(0,168,188,0.08);padding:0;margin:0;}
+
+/* ARTICLE CARD */
+.article-card{
+  background:rgba(255,255,255,0.75);
+  padding:32px 28px;
+  position:relative;overflow:hidden;
+  cursor:none;transition:background .3s;
+  display:flex;flex-direction:column;
+}
+.article-card:hover{background:rgba(255,255,255,0.95);}
+.article-card-top{position:absolute;top:0;left:0;right:0;height:3px;transform:scaleX(0);transition:transform .4s ease;}
+.article-card:hover .article-card-top{transform:scaleX(1);}
+
+/* Category colors */
+.cat-tehnic .article-card-top{background:linear-gradient(90deg,var(--teal),var(--teal-light));}
+.cat-chimic .article-card-top{background:linear-gradient(90deg,var(--violet),var(--violet-light, #9b7de0));}
+.cat-normativ .article-card-top{background:linear-gradient(90deg,var(--amber),#ffb055);}
+.cat-operational .article-card-top{background:linear-gradient(90deg,var(--green),#00e890);}
+
+.article-cat{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding:3px 8px;border-radius:2px;display:inline-block;width:fit-content;}
+.cat-tehnic .article-cat{color:var(--teal-deep);background:rgba(0,168,188,0.08);border:1px solid rgba(0,168,188,0.2);}
+.cat-chimic .article-cat{color:var(--violet);background:rgba(124,92,191,0.07);border:1px solid rgba(124,92,191,0.2);}
+.cat-normativ .article-cat{color:var(--amber);background:rgba(255,144,34,0.07);border:1px solid rgba(255,144,34,0.2);}
+.cat-operational .article-cat{color:#007a45;background:rgba(0,200,122,0.07);border:1px solid rgba(0,200,122,0.2);}
+
+.article-title{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--dark);margin-bottom:10px;line-height:1.3;transition:color .3s;}
+.article-card:hover .article-title{color:var(--teal-deep);}
+.article-excerpt{font-size:13px;color:var(--muted);line-height:1.75;flex:1;margin-bottom:20px;}
+.article-meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.article-read{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.article-arrow{font-size:14px;color:var(--teal);opacity:0;transition:opacity .3s,transform .3s;}
+.article-card:hover .article-arrow{opacity:1;transform:translateX(4px);}
+
+/* FEATURED CARD */
+.article-card.featured{grid-column:span 2;}
+.article-card.featured .article-title{font-size:26px;}
+.featured-tag{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:rgba(201,169,110,0.1);border:1px solid rgba(201,169,110,0.3);padding:3px 10px;border-radius:2px;display:inline-block;margin-bottom:10px;}
+
+/* COMING SOON */
+.coming-soon{padding:40px 48px;border-top:1px solid rgba(0,200,122,0.08);}
+.cs-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.cs-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(0,200,122,0.2),transparent);}
+.cs-topics{display:flex;flex-wrap:wrap;gap:8px;}
+.cs-topic{font-family:var(--mono);font-size:9px;letter-spacing:1px;border:1px dashed rgba(0,168,188,0.25);color:var(--muted);padding:6px 14px;border-radius:2px;transition:all .2s;}
+.cs-topic:hover{border-color:var(--teal);color:var(--teal-deep);}
+
+/* CTA */
+.cta-bar{padding:28px 48px;border-top:1px solid rgba(0,200,122,0.1);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.5);}
+.cta-text{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--muted);}
+.cta-text em{color:var(--green);font-style:normal;}
+.btn-main{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--white);background:var(--green);padding:12px 26px;text-decoration:none;position:relative;overflow:hidden;transition:transform .2s;display:inline-block;cursor:none;border-radius:2px;}
+.btn-main::after{content:'';position:absolute;inset:0;background:#00e890;transform:translateX(-101%);transition:transform .3s;}
+.btn-main:hover{transform:translateY(-1px);}.btn-main:hover::after{transform:translateX(0);}
+.btn-main span{position:relative;z-index:1;}
+
+#sbar{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;align-items:center;gap:20px;padding:7px 48px;border-top:1px solid rgba(0,200,122,0.12);background:rgba(255,255,255,0.88);backdrop-filter:blur(8px);}
+.sdot{width:5px;height:5px;border-radius:50%;}
+.dg{background:#00c87a;box-shadow:0 0 5px #00c87a;animation:pd 2s infinite;}
+.dt{background:var(--teal);box-shadow:0 0 4px var(--teal);}
+@keyframes pd{0%,100%{opacity:1;}50%{opacity:.4;}}
+.stxt{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;}
+.ssep{flex:1;}
+#clk{font-family:var(--mono);font-size:9px;color:var(--muted);opacity:.6;}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.05s;}.rd2{transition-delay:.1s;}.rd3{transition-delay:.15s;}.rd4{transition-delay:.2s;}.rd5{transition-delay:.25s;}
+
+@media(max-width:900px){
+  html,body{cursor:auto;}
+  #cursor,#cursor-ring{display:none;}
+  nav{padding:14px 24px;}.nav-links{display:none;}
+  .page-hero,.filter-tabs,.coming-soon,.cta-bar{padding-left:24px;padding-right:24px;}
+  .blog-grid{grid-template-columns:1fr;}
+  .article-card.featured{grid-column:span 1;}
+  #sbar{padding:7px 24px;}
+}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="water-canvas"></canvas>
+<div id="overlay"></div>
+
+<nav>
+  <a href="aquaspapro-v4.html" class="nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="30" height="30">
+      <defs>
+        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00b4c8"/><stop offset="100%" stop-color="#007a8a"/></linearGradient>
+        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00c8dc" stop-opacity="0.3"/><stop offset="100%" stop-color="#00a0b4" stop-opacity="0.08"/></linearGradient>
+        <filter id="gw"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <circle cx="100" cy="100" r="92" fill="none" stroke="url(#g1)" stroke-width="1.5" opacity="0.4"/>
+      <circle cx="100" cy="100" r="78" fill="url(#g2)"/>
+      <path d="M100,22 A78,78 0 1,1 51,162" fill="none" stroke="url(#g1)" stroke-width="4" stroke-linecap="round" filter="url(#gw)"/>
+      <circle cx="51" cy="162" r="6.5" fill="url(#g1)" filter="url(#gw)"/>
+      <path d="M36,104 C52,85 70,85 87,104 C104,123 122,123 142,104" fill="none" stroke="#00a8bc" stroke-width="3" stroke-linecap="round"/>
+      <path d="M39,120 C55,101 73,101 90,120 C107,139 124,139 142,121" fill="none" stroke="#00a8bc" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    </svg>
+    <div class="logo-text"><span class="a">AquaSpa</span> <span class="p">Pro</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="servicii-tehnice.html">Servicii</a>
+    <a href="automatizari.html">Automatizări</a>
+    <a href="solutii-digitale.html">Digital</a>
+    <a href="blog.html" class="active">Blog</a>
+    <a href="mailto:office@aquaspapro.ro" class="nav-cta">Contact</a>
+  </div>
+</nav>
+
+<main>
+  <div class="page-hero">
+    <div class="breadcrumb"><a href="aquaspapro-v4.html">Home</a><span>/</span>Blog Tehnic</div>
+    <h1 class="page-title">Inginerie aplicată.<br><em>Documentată.</em></h1>
+    <p class="page-sub">Analize tehnice, legislație explicată și ghiduri practice pentru operatorii de facilități acvatice.</p>
+  </div>
+
+  <div class="filter-tabs">
+    <div class="filter-tab active">Toate</div>
+    <div class="filter-tab">Tehnic</div>
+    <div class="filter-tab">Chimic</div>
+    <div class="filter-tab">Normativ</div>
+    <div class="filter-tab">Operațional</div>
+  </div>
+
+  <div class="blog-grid">
+
+    <!-- FEATURED -->
+    <div class="article-card featured cat-normativ reveal rd1">
+      <div class="article-card-top"></div>
+      <div class="featured-tag">✦ Articol recomandat</div>
+      <div class="article-cat">Normativ</div>
+      <div class="article-title">OMS 994/2018 explicat pentru manageri — ce verifică DSP și cum te pregătești</div>
+      <p class="article-excerpt">Regulamentul OMS 994/2018 stabilește parametrii chimici și microbiologici pentru bazinele de înot publice din România. Înțelegerea acestuia nu este opțională — este singura modalitate de a evita suspendarea activității la un control neprogramat. Îți explicăm capitolele critice, valorile limită și ce documentație ai nevoie pregătită.</p>
+      <div class="article-meta">
+        <div class="article-read">8 min lectură</div>
+        <div class="article-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="article-card cat-tehnic reveal rd2">
+      <div class="article-card-top"></div>
+      <div class="article-cat">Tehnic</div>
+      <div class="article-title">Pompă supradimensionată — cum recunoști problema și cât te costă</div>
+      <p class="article-excerpt">Majoritatea piscinelor comerciale din România au pompe cu debit de 2–3 ori mai mare decât necesarul real. Cum identifici problema și ce economii poți face.</p>
+      <div class="article-meta">
+        <div class="article-read">5 min lectură</div>
+        <div class="article-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="article-card cat-chimic reveal rd3">
+      <div class="article-card-top"></div>
+      <div class="article-cat">Chimic</div>
+      <div class="article-title">LSI — Indicele Langelier și de ce contează pentru piscina ta</div>
+      <p class="article-excerpt">LSI măsoară dacă apa este corozivă sau depunătoare. Un LSI incorect degradează echipamentele, atacă finisajele și poate fi amendat de DSP. Explică calculul și interpretarea.</p>
+      <div class="article-meta">
+        <div class="article-read">6 min lectură</div>
+        <div class="article-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="article-card cat-operational reveal rd4">
+      <div class="article-card-top"></div>
+      <div class="article-cat">Operațional</div>
+      <div class="article-title">Checklist pre-start sezon — 12 puncte critice înainte de deschiderea piscinei</div>
+      <p class="article-excerpt">Redeschiderea după sezonul rece este momentul cu cel mai mare risc de avarie și neconformitate. Lista completă de verificări tehnice și chimice.</p>
+      <div class="article-meta">
+        <div class="article-read">4 min lectură</div>
+        <div class="article-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="article-card cat-chimic reveal rd5">
+      <div class="article-card-top"></div>
+      <div class="article-cat">Chimic</div>
+      <div class="article-title">HOCl vs clor total — ce măsori de fapt și ce nu îți spune testul simplu</div>
+      <p class="article-excerpt">Clorul total nu este clorul activ. HOCl este forma bactericidă a clorului — și depinde critic de pH. Cum calculezi eficiența reală a dezinfecției.</p>
+      <div class="article-meta">
+        <div class="article-read">5 min lectură</div>
+        <div class="article-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="article-card cat-tehnic reveal rd1">
+      <div class="article-card-top"></div>
+      <div class="article-cat">Tehnic</div>
+      <div class="article-title">Schema hidraulică — greșelile frecvente în proiectare și cum le evităm</div>
+      <p class="article-excerpt">Filtre dimensionate greșit, viteze de recirculare necorespunzătoare, prize de apă insuficiente. Cele mai costisitoare erori de proiectare și soluțiile lor.</p>
+      <div class="article-meta">
+        <div class="article-read">7 min lectură</div>
+        <div class="article-arrow">→</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMING SOON -->
+  <div class="coming-soon reveal">
+    <div class="cs-label">În pregătire</div>
+    <div class="cs-topics">
+      <span class="cs-topic">Prelată termică — calcul pierderi vs cost</span>
+      <span class="cs-topic">ISCIR pentru generatoare de aburi SPA</span>
+      <span class="cs-topic">Protocol Legionella — ghid practic</span>
+      <span class="cs-topic">ROI invertor pompă — calcul complet</span>
+      <span class="cs-topic">Filtre nisip vs DE vs cartridge</span>
+      <span class="cs-topic">Recirculare forțată — când și de ce</span>
+      <span class="cs-topic">Transformatoare SELV în zonele cu apă</span>
+    </div>
+  </div>
+
+  <div class="cta-bar">
+    <div class="cta-text">Vrei să fii notificat când publicăm articole <em>noi?</em></div>
+    <a href="mailto:office@aquaspapro.ro?subject=Newsletter Blog Tehnic AquaSpa Pro" class="btn-main"><span>Abonează-te →</span></a>
+  </div>
+</main>
+
+<div id="sbar">
+  <div class="sdot dg"></div><div class="stxt">Online</div>
+  <div class="sdot dt"></div><div class="stxt">Blog tehnic</div>
+  <div class="ssep"></div>
+  <div class="stxt">aquaspapro.ro</div>
+  <div id="clk"></div>
+</div>
+
+<script>
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+document.querySelectorAll('a,button,.filter-tab,.article-card').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));});
+
+document.querySelectorAll('.filter-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');});
+});
+
+const cv=document.getElementById('water-canvas'),cx=cv.getContext('2d');
+let W,H,t=0;
+function rsz(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+const WV=[];
+for(let i=0;i<6;i++) WV.push({amp:12+Math.random()*20,freq:.003+Math.random()*.005,spd:.12+Math.random()*.28,ph:Math.random()*Math.PI*2,yB:.2+(i/6)*.75,al:.025+Math.random()*.04,lw:.3+Math.random()*.8,c:i%3===0?'rgba(0,200,122,A)':i%3===1?'rgba(0,168,188,A)':'rgba(201,169,110,A)'});
+(function draw(){
+  cx.clearRect(0,0,W,H);
+  WV.forEach(w=>{
+    const yB=H*w.yB;
+    cx.beginPath();cx.moveTo(0,yB);
+    for(let x=0;x<=W;x+=4) cx.lineTo(x,yB+Math.sin(x*w.freq+t*w.spd+w.ph)*w.amp+Math.sin(x*w.freq*2.1+t*w.spd*.6)*(w.amp*.22));
+    cx.lineTo(W,H);cx.lineTo(0,H);cx.closePath();
+    const gr=cx.createLinearGradient(0,yB-w.amp,0,yB+w.amp);
+    gr.addColorStop(0,w.c.replace('A',w.al));gr.addColorStop(1,w.c.replace('A',0));
+    cx.fillStyle=gr;cx.fill();
+    cx.beginPath();cx.moveTo(0,yB+Math.sin(w.ph)*w.amp);
+    for(let x=0;x<=W;x+=4) cx.lineTo(x,yB+Math.sin(x*w.freq+t*w.spd+w.ph)*w.amp);
+    cx.strokeStyle=w.c.replace('A',w.al*1.8);cx.lineWidth=w.lw;cx.stroke();
+  });
+  t+=.016;requestAnimationFrame(draw);
+})();
+
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('visible');obs.unobserve(el.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+(function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('ro-RO',{hour12:false});setTimeout(tick,1000);})();
+</script>
+</body>
+</html>

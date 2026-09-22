@@ -176,6 +176,10 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
 /* LEGAL FOOTER VISIBILITY FIX */
 html,body{height:auto;min-height:100%;overflow:auto}
 #app{position:relative;inset:auto;min-height:100vh}
+/* ACCESSIBILITY */
+:focus-visible{outline:3px solid #007a8a;outline-offset:3px}
+@media (pointer:fine){html,body,a,button{cursor:auto!important}#cursor,#cursor-ring{display:none!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>

@@ -239,6 +239,10 @@ header::after{
 /* LEGAL FOOTER VISIBILITY FIX */
 html,body{height:auto;min-height:100%;overflow:auto}
 #app{position:relative;inset:auto;min-height:100vh}
+/* ACCESSIBILITY */
+:focus-visible{outline:3px solid #007a8a;outline-offset:3px}
+@media (pointer:fine){html,body,a,button{cursor:auto!important}#cursor,#cursor-ring{display:none!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"AquaSpa Pro","legalName":"AQUASPAPRO S.R.L.","url":"https://www.aquaspapro.ro/","email":["mailto:office@aquaspapro.ro","mailto:tehnic@aquaspapro.ro"],"telephone":"+40775756192","taxID":"55611443","address":{"@type":"PostalAddress","streetAddress":"Aleea Rădășeni nr. 7B","addressLocality":"București","addressRegion":"Sector 5","addressCountry":"RO"}}</script>
 </head>

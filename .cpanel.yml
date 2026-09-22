@@ -1,0 +1,5 @@
+﻿---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home2/aquaspap/public_html/
+    - /bin/cp -R index.html servicii-tehnice.html automatizari.html solutii-digitale.html blog.html contact.html confidentialitate.html cookies.html robots.txt sitemap.xml Logo_AquaSpa_Pro.PNG .htaccess $DEPLOYPATH

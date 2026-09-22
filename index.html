@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AquaSpa Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --teal:#00a8bc;--teal-light:#00c8dc;--teal-deep:#007a8a;--teal-pale:#e8f6f8;
+  --gold:#c9a96e;--gold-light:#e8c98a;--gold-dark:#a07840;
+  --coral:#ff6b6b;--coral-light:#ff8e8e;
+  --green:#00c87a;--green-light:#00e890;
+  --violet:#7c5cbf;--violet-light:#9b7de0;
+  --amber:#ff9022;--amber-light:#ffb055;
+  --white:#ffffff;--off-white:#f0f8fa;--light:#e0f2f5;
+  --dark:#0a1e28;--mid:#1a3a45;--muted:#5a8a95;--text:#1a3a45;
+  --serif:'EB Garamond',Georgia,serif;--mono:'DM Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--off-white);color:var(--dark);font-family:var(--sans);font-weight:300;cursor:none;}
+
+/* CURSOR */
+#cursor{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--teal);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;}
+#cursor-ring{position:fixed;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(0,168,188,0.5);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+body.hovering #cursor{width:16px;height:16px;background:var(--teal-light);}
+body.hovering #cursor-ring{width:56px;height:56px;border-color:var(--teal);}
+
+/* CANVAS */
+#water-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
+
+/* LIGHT OVERLAY */
+#overlay{position:fixed;inset:0;z-index:1;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,168,188,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(201,169,110,0.08) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(240,248,250,0.85) 0%, rgba(240,248,250,0.5) 50%, rgba(220,240,244,0.9) 100%);
+  pointer-events:none;
+}
+
+/* APP */
+#app{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;}
+
+/* HEADER */
+header{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:0 48px;height:64px;
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(0,168,188,0.15);
+  position:relative;
+}
+header::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),var(--teal-light),var(--teal),transparent);
+  animation:scanH 4s ease-in-out infinite;
+}
+@keyframes scanH{0%,100%{opacity:.4;}50%{opacity:1;}}
+
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-text{font-family:var(--serif);font-style:italic;font-size:22px;}
+.logo-text .a{color:var(--teal);}.logo-text .p{color:var(--teal-light);font-size:17px;}
+
+.header-tagline{
+  text-align:center;font-family:var(--mono);font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--muted);
+}
+.header-tagline span{color:var(--teal);animation:blink 3s ease-in-out infinite;}
+@keyframes blink{0%,90%,100%{opacity:1;}95%{opacity:.2;}}
+
+.header-right{display:flex;justify-content:flex-end;align-items:center;gap:12px;}
+.status-live{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pd 2s infinite;}
+@keyframes pd{0%,100%{opacity:1;}50%{opacity:.3;}}
+.btn-portal{
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);background:var(--teal);border:none;
+  padding:8px 18px;cursor:none;text-decoration:none;
+  transition:background .3s,transform .2s;
+}
+.btn-portal:hover{background:var(--teal-light);transform:translateY(-1px);}
+
+/* HERO */
+#hero{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 48px 20px;position:relative;}
+
+.hero-pre{
+  font-family:var(--mono);font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--teal-deep);margin-bottom:24px;
+  opacity:0;transform:translateY(20px);animation:sUp .8s ease .8s forwards;
+  display:flex;align-items:center;gap:14px;
+}
+.hero-pre::before{content:'';width:32px;height:1px;background:var(--teal);}
+
+.hero-title{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(48px,7vw,96px);font-weight:300;line-height:1.05;max-width:800px;
+}
+.hero-title .ln{display:block;overflow:hidden;}
+.hero-title .ln span{display:block;opacity:0;transform:translateY(100%);animation:lUp .9s cubic-bezier(.16,1,.3,1) forwards;}
+.hero-title .ln:nth-child(1) span{animation-delay:1s;}
+.hero-title .ln:nth-child(2) span{animation-delay:1.2s;}
+.hero-title .ln:nth-child(3) span{animation-delay:1.4s;}
+.hero-title em{font-style:normal;color:var(--teal);}
+.hero-title .sub-line{font-size:.55em;color:var(--muted);letter-spacing:.02em;}
+
+.hero-value{
+  font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.8vw,20px);
+  color:var(--teal-deep);margin-top:20px;max-width:560px;line-height:1.6;
+  border-left:3px solid var(--teal);padding-left:20px;
+  opacity:0;animation:sUp .8s ease 1.8s forwards;
+}
+
+.hero-cta{
+  margin-top:36px;display:flex;gap:20px;align-items:center;
+  opacity:0;animation:sUp .8s ease 2s forwards;
+}
+.cta-main{
+  font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);background:var(--teal);border:none;
+  padding:16px 36px;cursor:none;text-decoration:none;
+  position:relative;overflow:hidden;transition:transform .2s;display:inline-block;
+}
+.cta-main::after{content:'';position:absolute;inset:0;background:var(--teal-light);transform:translateX(-101%);transition:transform .3s;}
+.cta-main:hover{transform:translateY(-2px);}.cta-main:hover::after{transform:translateX(0);}
+.cta-main span{position:relative;z-index:1;}
+.cta-sec{
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .3s,gap .3s;
+}
+.cta-sec:hover{color:var(--teal);gap:14px;}
+
+/* QUADRANTS */
+#quads{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid rgba(0,168,188,0.15);
+  opacity:0;animation:fIn .8s ease 2.4s forwards;
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(8px);
+}
+
+.quad{
+  padding:22px 28px;border-right:1px solid rgba(0,168,188,0.1);
+  position:relative;overflow:hidden;cursor:none;
+  text-decoration:none;color:var(--dark);
+  transition:background .4s;display:block;
+}
+.quad:last-child{border-right:none;}
+
+/* Each quad gets its own accent color */
+.quad-1{--qc:var(--teal);}
+.quad-2{--qc:var(--amber);}
+.quad-3{--qc:var(--violet);}
+.quad-4{--qc:var(--green);}
+
+.quad:hover{background:rgba(255,255,255,0.6);}
+.qline{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--qc),transparent);
+  transform:scaleX(0);transition:transform .5s ease;
+}
+.quad:hover .qline{transform:scaleX(1);}
+
+.qnum{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--qc);margin-bottom:8px;opacity:0.6;}
+.qtitle{
+  font-family:var(--serif);font-style:italic;font-size:17px;
+  color:var(--dark);margin-bottom:4px;line-height:1.3;
+  transition:color .3s;
+}
+.quad:hover .qtitle{color:var(--qc);}
+.qhint{
+  font-size:11px;color:var(--muted);line-height:1.6;
+  opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;
+}
+.quad:hover .qhint{opacity:1;transform:translateY(0);}
+.qarrow{
+  position:absolute;right:18px;bottom:16px;font-size:16px;
+  color:var(--qc);opacity:0;transition:opacity .3s,transform .3s;
+}
+.quad:hover .qarrow{opacity:1;transform:translateX(4px);}
+
+/* quad color dot */
+.qdot{
+  position:absolute;right:20px;top:20px;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--qc);opacity:0.3;
+  transition:opacity .3s,transform .3s;
+}
+.quad:hover .qdot{opacity:0.8;transform:scale(1.4);}
+
+/* STATUS BAR */
+#sbar{
+  display:flex;align-items:center;gap:24px;padding:8px 48px;
+  border-top:1px solid rgba(0,168,188,0.12);
+  background:rgba(255,255,255,0.6);backdrop-filter:blur(8px);
+}
+.sdot{width:5px;height:5px;border-radius:50%;}
+.dg{background:var(--green);box-shadow:0 0 5px var(--green);animation:pd 2s infinite;}
+.dt{background:var(--teal);box-shadow:0 0 4px var(--teal);}
+.dgo{background:var(--gold);box-shadow:0 0 4px var(--gold);}
+.stxt{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;}
+.ssep{flex:1;}
+#clk{font-family:var(--mono);font-size:9px;color:rgba(0,120,138,0.5);}
+
+/* DECORATIVE ELEMENTS */
+.deco-circle-1{
+  position:fixed;right:-100px;top:20%;width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,168,188,0.08) 0%,transparent 70%);
+  pointer-events:none;z-index:2;
+  animation:floatCircle 6s ease-in-out infinite;
+}
+.deco-circle-2{
+  position:fixed;left:-80px;bottom:20%;width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,0.07) 0%,transparent 70%);
+  pointer-events:none;z-index:2;
+  animation:floatCircle 8s ease-in-out infinite reverse;
+}
+@keyframes floatCircle{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+
+.vline{position:fixed;right:48px;top:50%;transform:translateY(-50%);width:1px;height:100px;z-index:5;background:linear-gradient(180deg,transparent,rgba(0,168,188,0.3),transparent);opacity:0;animation:fIn 1s ease 2.5s forwards;}
+
+@keyframes fIn{from{opacity:0;}to{opacity:1;}}
+@keyframes sUp{to{opacity:1;transform:translateY(0);}}
+@keyframes lUp{to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:768px){
+  html,body{overflow:auto;cursor:auto;}
+  #cursor,#cursor-ring{display:none;}
+  header{padding:0 20px;grid-template-columns:1fr 1fr;}
+  .header-tagline{display:none;}
+  #hero{padding:0 24px 16px;}
+  .hero-title{font-size:clamp(38px,10vw,56px);}
+  #quads{grid-template-columns:1fr 1fr;}
+  #sbar{padding:8px 24px;flex-wrap:wrap;gap:12px;}
+  .deco-circle-1,.deco-circle-2,.vline{display:none;}
+}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="water-canvas"></canvas>
+<div id="overlay"></div>
+<div class="deco-circle-1"></div>
+<div class="deco-circle-2"></div>
+<div class="vline"></div>
+
+<div id="app">
+  <!-- HEADER -->
+  <header>
+    <a href="#" class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
+        <defs>
+          <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00b4c8"/><stop offset="100%" stop-color="#007a8a"/></linearGradient>
+          <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00c8dc" stop-opacity="0.3"/><stop offset="100%" stop-color="#00a0b4" stop-opacity="0.08"/></linearGradient>
+          <filter id="gw"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <circle cx="100" cy="100" r="92" fill="none" stroke="url(#g1)" stroke-width="1.5" opacity="0.4"/>
+        <circle cx="100" cy="100" r="78" fill="url(#g2)"/>
+        <path d="M100,22 A78,78 0 1,1 51,162" fill="none" stroke="url(#g1)" stroke-width="4" stroke-linecap="round" filter="url(#gw)"/>
+        <circle cx="51" cy="162" r="6.5" fill="url(#g1)" filter="url(#gw)"/>
+        <path d="M36,104 C52,85 70,85 87,104 C104,123 122,123 142,104" fill="none" stroke="#00a8bc" stroke-width="3" stroke-linecap="round"/>
+        <path d="M39,120 C55,101 73,101 90,120 C107,139 124,139 142,121" fill="none" stroke="#00a8bc" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+      <div class="logo-text"><span class="a">AquaSpa</span> <span class="p">Pro</span></div>
+    </a>
+
+    <div class="header-tagline">Un singur partener tehnic<span>_</span></div>
+
+    <div class="header-right">
+      <div class="status-live"><div class="live-dot"></div>Online</div>
+      <a href="https://aqualab.aquaspapro.ro" class="btn-portal" target="_blank">Portal Client →</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-pre">Audit tehnic · Automatizări · Soluții digitale</div>
+    <h1 class="hero-title">
+      <span class="ln"><span>Un singur</span></span>
+      <span class="ln"><span>partener <em>tehnic.</em></span></span>
+      <span class="ln"><span class="sub-line">Tot ciclul de viață al facilității tale acvatice.</span></span>
+    </h1>
+    <p class="hero-value">"Transformăm facilitatea ta de wellness dintr-un cost în active cu randament măsurabil."</p>
+    <div class="hero-cta">
+      <a href="mailto:office@aquaspapro.ro" class="cta-main"><span>Solicită o evaluare</span></a>
+      <a href="servicii-tehnice.html" class="cta-sec">Descoperă serviciile →</a>
+    </div>
+  </section>
+
+  <!-- QUADRANTS -->
+  <div id="quads">
+    <a href="servicii-tehnice.html" class="quad quad-1">
+      <div class="qline"></div>
+      <div class="qdot"></div>
+      <div class="qnum">01</div>
+      <div class="qtitle">Servicii Tehnice</div>
+      <div class="qhint">Audit · Eficientizare · Conformitate · Mentenanță</div>
+      <div class="qarrow">→</div>
+    </a>
+    <a href="automatizari.html" class="quad quad-2">
+      <div class="qline"></div>
+      <div class="qdot"></div>
+      <div class="qnum">02</div>
+      <div class="qtitle">Automatizări &<br>Control la distanță</div>
+      <div class="qhint">Controllere · WiFi · Alerte automate</div>
+      <div class="qarrow">→</div>
+    </a>
+    <a href="solutii-digitale.html" class="quad quad-3">
+      <div class="qline"></div>
+      <div class="qdot"></div>
+      <div class="qnum">03</div>
+      <div class="qtitle">Soluții Digitale</div>
+      <div class="qhint">FacilityOS · Monitorizare dedicată</div>
+      <div class="qarrow">→</div>
+    </a>
+    <a href="blog.html" class="quad quad-4">
+      <div class="qline"></div>
+      <div class="qdot"></div>
+      <div class="qnum">04</div>
+      <div class="qtitle">Blog Tehnic</div>
+      <div class="qhint">OMS 994/2018 · Hidraulică · Chimie</div>
+      <div class="qarrow">→</div>
+    </a>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div id="sbar">
+    <div class="sdot dg"></div><div class="stxt">Online</div>
+    <div class="sdot dt"></div><div class="stxt">OMS 994/2018</div>
+    <div class="sdot dt"></div><div class="stxt">SR EN 15288</div>
+    <div class="sdot dgo"></div><div class="stxt">AB Proiect Build Design SRL</div>
+    <div class="ssep"></div>
+    <div class="stxt">aquaspapro.ro</div>
+    <div id="clk"></div>
+  </div>
+</div>
+
+<script>
+// CURSOR
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+
+// WATER — light teal waves on pale background
+const cv=document.getElementById('water-canvas'),cx=cv.getContext('2d');
+let W,H,t=0;
+function rsz(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+rsz();window.addEventListener('resize',rsz);
+
+const WV=[];
+for(let i=0;i<8;i++) WV.push({
+  amp:20+Math.random()*50,freq:.003+Math.random()*.005,
+  spd:.15+Math.random()*.35,ph:Math.random()*Math.PI*2,
+  yB:.3+(i/8)*.65,al:.04+Math.random()*.08,lw:.5+Math.random()*1.5,
+  color: i%3===0?'rgba(0,168,188,A)': i%3===1?'rgba(0,200,220,A)':'rgba(201,169,110,A)'
+});
+
+let mX=W/2,mY=H/2;
+document.addEventListener('mousemove',e=>{mX=e.clientX;mY=e.clientY;});
+
+const pts=[];
+for(let i=0;i<60;i++) pts.push({
+  x:Math.random()*2000,y:Math.random()*1200,
+  vx:(Math.random()-.5)*.3,vy:-Math.random()*.4-.1,
+  r:Math.random()*2+.5,a:Math.random()*.15+.03,lf:Math.random(),
+  c:Math.random()>.7?'rgba(201,169,110,A)':'rgba(0,168,188,A)'
+});
+
+(function draw(){
+  cx.clearRect(0,0,W,H);
+
+  // subtle bg gradient
+  const bg=cx.createRadialGradient(W*.5,H*.8,0,W*.5,H*.8,W*.8);
+  bg.addColorStop(0,'rgba(0,168,188,0.06)');bg.addColorStop(1,'rgba(240,248,250,0)');
+  cx.fillStyle=bg;cx.fillRect(0,0,W,H);
+
+  // mouse ripple
+  const mg=cx.createRadialGradient(mX,mY,0,mX,mY,160);
+  mg.addColorStop(0,'rgba(0,168,188,0.04)');mg.addColorStop(1,'rgba(0,168,188,0)');
+  cx.fillStyle=mg;cx.fillRect(0,0,W,H);
+
+  WV.forEach((w,i)=>{
+    const yB=H*w.yB;
+    const mi=Math.exp(-Math.pow((0-mX)/400,2))*Math.sin(t+i)*8;
+    cx.beginPath();cx.moveTo(0,yB);
+    for(let x=0;x<=W;x+=4){
+      const mif=Math.exp(-Math.pow((x-mX)/350,2))*Math.sin(t*2+i)*8;
+      cx.lineTo(x,yB+Math.sin(x*w.freq+t*w.spd+w.ph)*w.amp+Math.sin(x*w.freq*2.3+t*w.spd*.7)*(w.amp*.25)+mif);
+    }
+    cx.lineTo(W,H);cx.lineTo(0,H);cx.closePath();
+    const col=w.color.replace('A',w.al*.7);
+    const gr=cx.createLinearGradient(0,yB-w.amp,0,yB+w.amp*2);
+    gr.addColorStop(0,w.color.replace('A',w.al));gr.addColorStop(1,w.color.replace('A',0));
+    cx.fillStyle=gr;cx.fill();
+    // stroke
+    cx.beginPath();cx.moveTo(0,yB+Math.sin(w.ph)*w.amp);
+    for(let x=0;x<=W;x+=4) cx.lineTo(x,yB+Math.sin(x*w.freq+t*w.spd+w.ph)*w.amp);
+    cx.strokeStyle=w.color.replace('A',w.al*1.8);cx.lineWidth=w.lw;cx.stroke();
+  });
+
+  // particles
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.lf+=.0015;
+    if(p.y<-5||p.lf>1){p.x=Math.random()*W;p.y=H+5;p.lf=0;}
+    const al=p.a*Math.sin(p.lf*Math.PI);
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    cx.fillStyle=p.c.replace('A',al);cx.fill();
+  });
+
+  t+=.016;requestAnimationFrame(draw);
+})();
+
+// CLOCK
+(function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('ro-RO',{hour12:false});setTimeout(tick,1000);})();
+</script>
+</body>
+</html>

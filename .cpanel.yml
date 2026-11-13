@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home2/aquaspap/public_html/
-    - /bin/cp -R index.html servicii-tehnice.html automatizari.html solutii-digitale.html blog.html contact.html confidentialitate.html cookies.html robots.txt sitemap.xml Logo_AquaSpa_Pro.PNG .htaccess $DEPLOYPATH
+    - /bin/cp -R index.html servicii-tehnice.html automatizari.html solutii-digitale.html blog.html contact.html confidentialitate.html cookies.html robots.txt sitemap.xml motion.css navigation.css visual-direction.css site-system.css request-form.css request-form.js trimite-solicitare.php hero-blog-concept.webp hero-contact-concept.webp hero-servicii-concept.webp hero-water-concept.webp logo-alb.png monitorizare-grafic-concept.png schema-tratare-glow.webp service-01.webp tablet-spa-concept.png fonts Logo_AquaSpa_Pro.PNG .htaccess $DEPLOYPATH

@@ -1,0 +1,13 @@
+/* Shared navigation and readable mobile layout. */
+html{scroll-behavior:smooth}
+a:focus-visible,button:focus-visible{outline:3px solid #007a8a;outline-offset:3px}
+nav:not(.legal-links) .nav-links{display:flex;align-items:center;gap:clamp(12px,2vw,28px)}
+nav:not(.legal-links) .nav-links a{white-space:nowrap}
+nav:not(.legal-links) .nav-links a{font-size:14px;letter-spacing:0;text-transform:none}
+@media(max-width:900px){
+  nav:not(.legal-links){padding:14px 20px;gap:14px;flex-wrap:wrap;height:auto;min-height:70px}
+  nav:not(.legal-links) .nav-links{width:100%;overflow-x:auto;gap:8px;padding:2px 0 8px;scrollbar-width:thin}
+  nav:not(.legal-links) .nav-links a{display:inline-flex;min-height:42px;align-items:center;padding:8px 12px;font-size:14px;letter-spacing:0}
+  nav:not(.legal-links) .nav-links .nav-cta{margin-left:auto}
+  main{padding-top:140px}
+}

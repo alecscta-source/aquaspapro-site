@@ -2,8 +2,8 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AquaSpa Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AquaSpa Pro — Piscine, SPA și wellness</title>
 <meta name="description" content="Proiectare, consultanță, automatizări și servicii tehnice pentru piscine, SPA și facilități wellness — AquaSpa Pro.">
 <link rel="canonical" href="https://www.aquaspapro.ro/">
 <style>
@@ -170,12 +170,12 @@ header::after{
 .quad:hover .qtitle{color:var(--qc);}
 .qhint{
   font-size:11px;color:var(--muted);line-height:1.6;
-  opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;
+  opacity:1;transform:none;transition:opacity .3s,transform .3s;
 }
 .quad:hover .qhint{opacity:1;transform:translateY(0);}
 .qarrow{
   position:absolute;right:18px;bottom:16px;font-size:16px;
-  color:var(--qc);opacity:0;transition:opacity .3s,transform .3s;
+  color:var(--qc);opacity:1;transition:opacity .3s,transform .3s;
 }
 .quad:hover .qarrow{opacity:1;transform:translateX(4px);}
 
@@ -243,10 +243,41 @@ html,body{height:auto;min-height:100%;overflow:auto}
 :focus-visible{outline:3px solid #007a8a;outline-offset:3px}
 @media (pointer:fine){html,body,a,button{cursor:auto!important}#cursor,#cursor-ring{display:none!important}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Remodel: clear navigation, readable service cards, fluid page height. */
+#app{min-height:0}
+header{display:flex;justify-content:space-between;gap:24px;min-height:78px;height:auto;padding:12px max(24px,calc((100vw - 1280px)/2));}
+.home-nav{display:flex;align-items:center;gap:clamp(12px,2vw,28px);flex-wrap:wrap;justify-content:flex-end}
+.home-nav a{color:#315b66;text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap;padding:10px 2px}
+.home-nav a:hover{color:#007a8a}
+.home-nav .home-contact{color:#fff;background:#007a8a;padding:12px 18px;border-radius:4px}
+.home-nav .home-contact:hover{color:#fff;background:#075e6a}
+#hero{min-height:520px;padding:80px max(24px,calc((100vw - 1280px)/2)) 64px}
+.hero-title{max-width:1000px;font-style:normal;font-weight:400;font-size:clamp(48px,7vw,102px);letter-spacing:-.04em}
+.hero-title em{font-style:italic}
+.hero-value{max-width:660px;font-family:var(--sans);font-style:normal;font-size:clamp(17px,1.8vw,22px);color:#315b66;line-height:1.55}
+.hero-pre{font-size:13px;letter-spacing:.12em}
+.hero-cta{flex-wrap:wrap}
+.cta-main,.cta-sec{font-size:14px;letter-spacing:0;text-transform:none}
+#quads{max-width:1280px;width:100%;margin:auto;gap:12px;padding:12px 24px 32px;border:0;background:transparent}
+.quad{min-height:170px;padding:24px;background:#fff;border:1px solid #d4e8eb;border-radius:6px;box-shadow:0 12px 32px rgba(10,50,65,.06)}
+.quad:last-child{border-right:1px solid #d4e8eb}
+.qnum{font-size:12px}.qtitle{font-style:normal;font-size:clamp(20px,2vw,26px)}
+.qhint{font-size:14px;color:#456b75;line-height:1.5;margin-top:8px}
+.qarrow{font-size:22px}
+#sbar{padding:12px max(24px,calc((100vw - 1280px)/2));flex-wrap:wrap}
+.stxt{font-size:12px;letter-spacing:.04em;line-height:1.5}
+.legal-footer{padding:24px max(24px,calc((100vw - 1280px)/2));font-size:14px}
+@media(max-width:900px){header{align-items:flex-start;flex-direction:column}.home-nav{justify-content:flex-start;gap:8px 18px}.home-nav a{padding:8px 0}.home-nav .home-contact{padding:8px 14px}#hero{min-height:0;padding-top:72px;padding-bottom:64px}#quads{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){#hero{padding-top:58px}.hero-title{font-size:clamp(44px,12vw,68px)}#quads{grid-template-columns:1fr}.quad{min-height:140px}.hero-cta{align-items:flex-start;flex-direction:column}.stxt{font-size:12px}}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"AquaSpa Pro","legalName":"AQUASPAPRO S.R.L.","url":"https://www.aquaspapro.ro/","email":["mailto:office@aquaspapro.ro","mailto:tehnic@aquaspapro.ro"],"telephone":"+40775756192","taxID":"55611443","address":{"@type":"PostalAddress","streetAddress":"Aleea Rădășeni nr. 7B","addressLocality":"București","addressRegion":"Sector 5","addressCountry":"RO"}}</script>
+<link rel="stylesheet" href="visual-direction.css">
+<link rel="stylesheet" href="motion.css?v=20261009-3">
+<link rel="stylesheet" href="site-system.css?v=20261112">
+<link rel="stylesheet" href="request-form.css?v=20261112">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"AquaSpa Pro","legalName":"AQUASPAPRO S.R.L.","url":"https://www.aquaspapro.ro/","email":["mailto:office@aquaspapro.ro","mailto:tehnic@aquaspapro.ro"],"telephone":"+40778756192","taxID":"55611443","address":{"@type":"PostalAddress","streetAddress":"Aleea Rădășeni nr. 7B","addressLocality":"București","addressRegion":"Sector 5","addressCountry":"RO"}}</script>
 </head>
-<body>
+<body class="home">
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 <canvas id="water-canvas"></canvas>
@@ -258,7 +289,7 @@ html,body{height:auto;min-height:100%;overflow:auto}
 <div id="app">
   <!-- HEADER -->
   <header>
-    <a href="#" class="logo">
+    <a href="index.html" class="logo" aria-label="AquaSpa Pro, pagina principală">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36">
         <defs>
           <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00b4c8"/><stop offset="100%" stop-color="#007a8a"/></linearGradient>
@@ -275,25 +306,27 @@ html,body{height:auto;min-height:100%;overflow:auto}
       <div class="logo-text"><span class="a">AquaSpa</span> <span class="p">Pro</span></div>
     </a>
 
-    <div class="header-tagline">Un singur partener tehnic<span>_</span></div>
-
-    <div class="header-right">
-      <div class="status-live"><div class="live-dot"></div>Online</div>
-    </div>
+    <nav class="home-nav" aria-label="Navigare principală">
+      <a href="index.html" class="active" aria-current="page">Acasă</a>
+      <a href="servicii-tehnice.html">Audit</a>
+      <a href="automatizari.html">Automatizări</a>
+      <a href="solutii-digitale.html">Digital</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html" class="home-contact">Contact</a>
+    </nav>
   </header>
 
   <!-- HERO -->
   <section id="hero">
-    <div class="hero-pre">Audit tehnic · Automatizări · Soluții digitale</div>
+    <div class="hero-pre">Piscine · SPA · wellness</div>
     <h1 class="hero-title">
-      <span class="ln"><span>Un singur</span></span>
-      <span class="ln"><span>partener <em>tehnic.</em></span></span>
-      <span class="ln"><span class="sub-line">Tot ciclul de viață al facilității tale acvatice.</span></span>
+      <span class="ln"><span>De la costuri ascunse</span></span>
+      <span class="ln"><span>la <em>control total.</em></span></span>
     </h1>
-    <p class="hero-value">"Transformăm facilitatea ta de wellness dintr-un cost în active cu randament măsurabil."</p>
+    <p class="hero-value">Audit, automatizare și monitorizare pentru piscine și SPA.</p>
     <div class="hero-cta">
-      <a href="mailto:office@aquaspapro.ro" class="cta-main"><span>Solicită o evaluare</span></a>
-      <a href="servicii-tehnice.html" class="cta-sec">Descoperă serviciile →</a>
+      <a href="contact.html" class="cta-main" data-request-service="general"><span>Discută un proiect</span></a>
+      <a href="servicii-tehnice.html" class="cta-sec">Descoperă auditul →</a>
     </div>
   </section>
 
@@ -303,15 +336,15 @@ html,body{height:auto;min-height:100%;overflow:auto}
       <div class="qline"></div>
       <div class="qdot"></div>
       <div class="qnum">01</div>
-      <div class="qtitle">Servicii Tehnice</div>
-      <div class="qhint">Audit · Eficientizare · Conformitate · Mentenanță</div>
+      <div class="qtitle">Audit tehnic complet</div>
+      <div class="qhint">Costuri · Calitatea apei · Exploatare · Echipamente</div>
       <div class="qarrow">→</div>
     </a>
     <a href="automatizari.html" class="quad quad-2">
       <div class="qline"></div>
       <div class="qdot"></div>
       <div class="qnum">02</div>
-      <div class="qtitle">Automatizări &<br>Control la distanță</div>
+      <div class="qtitle">Automatizări și<br>control la distanță</div>
       <div class="qhint">Controllere · WiFi · Alerte automate</div>
       <div class="qarrow">→</div>
     </a>
@@ -319,7 +352,7 @@ html,body{height:auto;min-height:100%;overflow:auto}
       <div class="qline"></div>
       <div class="qdot"></div>
       <div class="qnum">03</div>
-      <div class="qtitle">Soluții Digitale</div>
+      <div class="qtitle">Soluții digitale</div>
       <div class="qhint">FacilityOS · Monitorizare dedicată</div>
       <div class="qarrow">→</div>
     </a>
@@ -327,8 +360,8 @@ html,body{height:auto;min-height:100%;overflow:auto}
       <div class="qline"></div>
       <div class="qdot"></div>
       <div class="qnum">04</div>
-      <div class="qtitle">Blog Tehnic</div>
-      <div class="qhint">OMS 994/2018 · Hidraulică · Chimie</div>
+      <div class="qtitle">Blog tehnic</div>
+      <div class="qhint">Calitatea apei · Tratare · Exploatare</div>
       <div class="qarrow">→</div>
     </a>
   </div>
@@ -336,19 +369,19 @@ html,body{height:auto;min-height:100%;overflow:auto}
   <!-- STATUS BAR -->
   <div id="sbar">
     <div class="sdot dg"></div><div class="stxt">Online</div>
-    <div class="sdot dt"></div><div class="stxt">OMS 994/2018</div>
+    <div class="sdot dt"></div><div class="stxt">Apă · Igienă · Exploatare</div>
     <div class="sdot dt"></div><div class="stxt">SR EN 15288</div>
-    <div class="stxt"><a href="mailto:office@aquaspapro.ro">office@aquaspapro.ro</a> · <a href="mailto:tehnic@aquaspapro.ro">tehnic@aquaspapro.ro</a> · <a href="tel:+40775756192">0775 756 192</a></div>
     <div class="ssep"></div>
     <div class="stxt">aquaspapro.ro</div>
     <div id="clk"></div>
   </div>
 </div>
 <footer class="legal-footer" aria-label="Informații juridice și contact">
-<div><strong>AQUASPAPRO S.R.L.</strong> · CUI 55611443 · J2026055119005<br>Aleea Rădășeni nr. 7B, Sector 5, București<br><a href="tel:+40775756192">0775 756 192</a> · <a href="mailto:office@aquaspapro.ro">office@aquaspapro.ro</a> · <a href="mailto:tehnic@aquaspapro.ro">tehnic@aquaspapro.ro</a></div>
+<div><strong>AQUASPAPRO S.R.L.</strong> · CUI 55611443 · J2026055119005<br>Aleea Rădășeni nr. 7B, Sector 5, București<br><a href="tel:+40778756192">0778.756.192</a> · <a href="mailto:office@aquaspapro.ro">office@aquaspapro.ro</a></div>
 <nav class="legal-links" aria-label="Informații legale"><a class="anpc-sal" href="https://reclamatiisal.anpc.ro/" rel="noopener noreferrer">Soluționarea Alternativă a Litigiilor (SAL)</a><a href="contact.html">Contact</a><a href="confidentialitate.html">Confidențialitate</a><a href="cookies.html">Cookies</a></nav>
 </footer>
 
+<script src="request-form.js?v=20261112" defer></script>
 <script>
 // CURSOR
 const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');

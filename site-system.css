@@ -1,0 +1,37 @@
+@font-face{font-family:Inter;src:url('fonts/inter-latin-wght-normal.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('fonts/ibm-plex-mono-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('fonts/ibm-plex-mono-600.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap}
+:root{--site-sans:Inter,Arial,sans-serif;--site-mono:'IBM Plex Mono',monospace;--site-ink:#f7fafb;--site-muted:#dfecef;--site-ease:cubic-bezier(.22,1,.36,1)}
+body{font-family:var(--site-sans);font-weight:400}
+.home .hero-title,.home .hero-value,.services-page .audit-content,.blog-page main,.contact-page main{font-family:var(--site-sans)}
+.home .hero-pre,.home .qnum,.services-page .audit-kicker,.services-page .audit-standards strong{font-family:var(--site-mono)}
+body.home .hero-title{font-size:clamp(58px,6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-.045em;max-width:850px}
+.home .hero-value{font-size:clamp(20px,2vw,21px);font-weight:480;line-height:1.55;max-width:660px}
+.home #overlay{background:linear-gradient(90deg,rgba(240,248,250,.96) 0%,rgba(240,248,250,.74) 52%,rgba(220,240,244,.58) 100%)}
+.services-page .audit-hero{background-image:linear-gradient(90deg,rgba(4,29,42,.96) 0%,rgba(4,29,42,.74) 61%,rgba(4,29,42,.35) 100%),url('service-01.webp')}
+.services-page .audit-content{max-width:660px}
+body.services-page .audit-title{font-size:clamp(58px,5.6vw,68px);font-weight:700;line-height:1.04;letter-spacing:-.045em}
+.services-page .audit-question{font-size:clamp(25px,2.25vw,28px);font-weight:680;line-height:1.32;color:var(--site-ink)}
+.services-page .audit-lead{font-size:20px!important;font-weight:480!important;line-height:1.58!important;color:var(--site-muted)!important}
+.services-page .audit-description p{font-size:18px!important;font-weight:420!important;line-height:1.68!important;color:var(--site-muted)!important}
+.services-page .audit-result{font-size:21px!important;font-weight:680!important;line-height:1.48!important;color:var(--site-ink)!important}
+.services-page .audit-standards p{font-size:16px!important;line-height:1.55!important;color:var(--site-muted)!important}
+.services-page .audit-standards strong{font-size:12px!important;font-weight:600!important;letter-spacing:.08em!important}
+.services-page .audit-closing strong{font-size:20px;font-weight:680}
+.services-page .audit-closing p{font-size:17px!important;color:var(--site-muted)!important}
+body.blog-page .page-title{font-family:var(--site-sans);font-size:clamp(58px,5.6vw,68px);font-weight:700;font-style:normal;line-height:1.05;letter-spacing:-.045em}
+body.blog-page .article-excerpt,body.blog-page .blog-intro{font-size:17px;line-height:1.65;font-weight:420}
+.site-btn,button.site-btn{font:700 15px/1 var(--site-sans);letter-spacing:.02em}
+@media(max-width:600px){
+ body.home .hero-title,body.services-page .audit-title{font-size:clamp(42px,12vw,48px)}
+ .home .hero-value{font-size:18px}.services-page .audit-question{font-size:22px}.services-page .audit-lead{font-size:18px!important}
+ .services-page .audit-description p{font-size:17px!important}.services-page .audit-result{font-size:19px!important}
+ body.blog-page .page-title{font-size:clamp(42px,12vw,48px)}
+ .services-page .audit-hero{background-image:linear-gradient(180deg,rgba(4,29,42,.92),rgba(4,29,42,.88)),url('service-01.webp')}
+}
+@media(prefers-reduced-motion:no-preference){
+ .home .hero-title .ln span{animation-duration:2.05s!important}.home .hero-value{animation-duration:1.75s!important}
+ .services-page .audit-kicker,.services-page .audit-title{animation-duration:2.05s!important}
+ .services-page .audit-question{animation-duration:1.8s!important}.services-page .audit-lead,.services-page .audit-description p,.services-page .audit-standards,.services-page .audit-result,.services-page .audit-closing{animation-duration:1.65s!important}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}}

@@ -1,0 +1,108 @@
+/* AquaSpa Pro — page-specific motion language. */
+:root{
+  --motion-ease:cubic-bezier(.42,0,.58,1);
+  --motion-ease-soft:cubic-bezier(.42,0,.58,1);
+}
+
+/* Progresul vizibil este distribuit pe întreaga durată, nu consumat în prima secundă. */
+@keyframes asp-rise{0%{opacity:0;transform:translateY(14px)}20%{opacity:.06;transform:translateY(13px)}50%{opacity:.42;transform:translateY(8px)}80%{opacity:.80;transform:translateY(3px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes asp-left{0%{opacity:0;transform:translateX(-16px)}20%{opacity:.06;transform:translateX(-15px)}50%{opacity:.42;transform:translateX(-9px)}80%{opacity:.80;transform:translateX(-3px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes asp-right{0%{opacity:0;transform:translateX(16px)}20%{opacity:.06;transform:translateX(15px)}50%{opacity:.42;transform:translateX(9px)}80%{opacity:.80;transform:translateX(3px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes asp-clip-up{0%{opacity:0;transform:translateY(20px)}20%{opacity:.06;transform:translateY(19px)}50%{opacity:.42;transform:translateY(11px)}80%{opacity:.80;transform:translateY(4px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes asp-focus{0%{opacity:0;transform:scale(.992)}20%{opacity:.06;transform:scale(.993)}50%{opacity:.42;transform:scale(.996)}80%{opacity:.80;transform:scale(.998)}100%{opacity:1;transform:scale(1)}}
+@keyframes asp-track{0%{opacity:0;transform:translateY(8px)}20%{opacity:.06;transform:translateY(7px)}50%{opacity:.42;transform:translateY(4px)}80%{opacity:.80;transform:translateY(1px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes asp-grow{0%{opacity:0;transform:scaleX(0)}20%{opacity:.06;transform:scaleX(.08)}50%{opacity:.42;transform:scaleX(.40)}80%{opacity:.80;transform:scaleX(.78)}100%{opacity:1;transform:scaleX(1)}}
+@keyframes asp-breathe{0%,100%{opacity:1}50%{opacity:.82}}
+
+/* Acasă — titlul se construiește în linii, apoi apar decizia și traseele. */
+body.home .header-tagline span{animation:asp-breathe 10s ease-in-out infinite!important}
+body.home .hero-pre{animation:asp-track 2.4s var(--motion-ease) .12s both!important}
+body.home .hero-title .ln span{animation:asp-clip-up 3s var(--motion-ease) both!important}
+body.home .hero-title .ln:nth-child(1) span{animation-delay:.30s!important}
+body.home .hero-title .ln:nth-child(2) span{animation-delay:.78s!important}
+body.home .hero-title .ln:nth-child(3) span{animation-delay:1.26s!important}
+body.home .hero-value{animation:asp-left 2.6s var(--motion-ease) 1.55s both!important}
+body.home .hero-cta{animation:asp-rise 2.4s var(--motion-ease) 1.95s both!important}
+body.home #quads .quad{animation:asp-rise 2.3s var(--motion-ease) both}
+body.home #quads .quad:nth-child(1){animation-delay:2.25s}
+body.home #quads .quad:nth-child(2){animation-delay:2.55s}
+body.home #quads .quad:nth-child(3){animation-delay:2.85s}
+body.home #quads .quad:nth-child(4){animation-delay:3.15s}
+body.home #sbar{animation:asp-focus 2.4s var(--motion-ease) 2.30s both}
+
+/* Audit — ritm vertical, ca o concluzie tehnică ce se clarifică treptat. */
+body.services-page .audit-kicker{animation:asp-track 2.4s var(--motion-ease) .12s both}
+body.services-page .audit-title{animation:asp-clip-up 3s var(--motion-ease) .38s both}
+body.services-page .audit-question{animation:asp-left 2.7s var(--motion-ease) .85s both}
+body.services-page .audit-lead{animation:asp-rise 2.5s var(--motion-ease) 1.22s both}
+body.services-page .audit-description p{animation:asp-rise 2.4s var(--motion-ease) both}
+body.services-page .audit-description p:nth-child(1){animation-delay:1.55s}
+body.services-page .audit-description p:nth-child(2){animation-delay:1.85s}
+body.services-page .audit-description p:nth-child(3){animation-delay:2.15s}
+body.services-page .audit-standards{animation:asp-right 2.5s var(--motion-ease) 2.48s both}
+body.services-page .audit-result{animation:asp-focus 2.5s var(--motion-ease) 2.78s both}
+body.services-page .audit-closing{animation:asp-rise 2.6s var(--motion-ease) 3.08s both}
+
+/* Automatizări — textul intră precis, din două direcții, fără a schimba pagina. */
+body.automation-page .page-title{animation:asp-focus 3s var(--motion-ease) .18s both}
+body.automation-page .page-sub{animation:asp-left 2.6s var(--motion-ease) .68s both}
+body.automation-page .live-badge{animation:asp-right 2.3s var(--motion-ease) 1.05s both}
+body.automation-page .left-panel .reveal{transform:translateX(-16px);transition:opacity 2.6s var(--motion-ease),transform 2.6s var(--motion-ease)}
+body.automation-page .left-panel .reveal.visible{transform:translateX(0)}
+body.automation-page .right-panel.reveal{transform:translateX(16px);transition:opacity 2.8s var(--motion-ease),transform 2.8s var(--motion-ease)}
+body.automation-page .right-panel.reveal.visible{transform:translateX(0)}
+
+/* Digital — senzație de interfață care pornește controlat. */
+body.digital-page .pl-pre{animation:asp-track 2.3s var(--motion-ease) .12s both!important}
+body.digital-page .pl-title{animation:asp-clip-up 2.9s var(--motion-ease) .40s both!important}
+body.digital-page .pl-sub{animation:asp-left 2.5s var(--motion-ease) .90s both!important}
+body.digital-page .pl-features{opacity:1!important;animation:none!important}
+body.digital-page .pl-features li{animation:asp-rise 2.2s var(--motion-ease) both}
+body.digital-page .pl-features li:nth-child(1){animation-delay:1.20s}
+body.digital-page .pl-features li:nth-child(2){animation-delay:1.45s}
+body.digital-page .pl-features li:nth-child(3){animation-delay:1.70s}
+body.digital-page .pl-features li:nth-child(4){animation-delay:1.95s}
+body.digital-page .pl-features li:nth-child(5){animation-delay:2.20s}
+body.digital-page .pl-features li:nth-child(6){animation-delay:2.45s}
+body.digital-page .pl-cta{animation:asp-rise 2.4s var(--motion-ease) 2.75s both!important}
+body.digital-page .panel-right{animation:asp-focus 3s var(--motion-ease) .50s both}
+
+/* Blog — titlu editorial și articole care intră în scenă la derulare. */
+body.blog-page .page-title{animation:asp-clip-up 2.9s var(--motion-ease) .18s both}
+body.blog-page .page-sub{animation:asp-left 2.5s var(--motion-ease) .70s both}
+body.blog-page .filter-tab{animation:asp-rise 2.1s var(--motion-ease) both}
+body.blog-page .filter-tab:nth-child(1){animation-delay:1.10s}
+body.blog-page .filter-tab:nth-child(2){animation-delay:1.30s}
+body.blog-page .filter-tab:nth-child(3){animation-delay:1.50s}
+body.blog-page .filter-tab:nth-child(4){animation-delay:1.70s}
+body.blog-page .filter-tab:nth-child(5){animation-delay:1.90s}
+body.blog-page .reveal{transition:opacity 2.5s var(--motion-ease),transform 2.5s var(--motion-ease)}
+body.blog-page .article-card.reveal:nth-child(even){transform:translateX(16px)}
+body.blog-page .article-card.reveal:nth-child(odd){transform:translateX(-16px)}
+body.blog-page .article-card.reveal.visible{transform:translateX(0)}
+
+/* Contact — secvență lentă, cu elemente succesive și fără flash. */
+body.contact-page main{animation:none}
+body.contact-page .contact-hero>p{animation:asp-left 2.4s var(--motion-ease) .18s both}
+body.contact-page .contact-hero h1{animation:asp-clip-up 3s var(--motion-ease) .55s both}
+body.contact-page .contact-primary{position:relative;border-bottom:0!important}
+body.contact-page .contact-primary::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(133,225,234,.48);transform-origin:left;animation:asp-grow 2.4s var(--motion-ease) 1.55s both}
+body.contact-page .contact-primary dt,
+body.contact-page .contact-primary dd{animation:asp-right 2.3s var(--motion-ease) both}
+body.contact-page .contact-primary dt:nth-of-type(1){animation-delay:.95s}
+body.contact-page .contact-primary dd:nth-of-type(1){animation-delay:1.20s}
+body.contact-page .contact-primary dt:nth-of-type(2){animation-delay:1.50s}
+body.contact-page .contact-primary dd:nth-of-type(2){animation-delay:1.75s}
+body.contact-page .contact-primary dt:nth-of-type(3){animation-delay:2.05s}
+body.contact-page .contact-primary dd:nth-of-type(3){animation-delay:2.30s}
+body.contact-page .contact-legal{animation:asp-rise 2.5s var(--motion-ease) 2.70s both}
+
+/* Pagini juridice — discret, fără spectacol inutil. */
+body:not(.home):not(.interior) main>p:first-child{animation:asp-left 2.1s var(--motion-ease) .10s both}
+body:not(.home):not(.interior) main>h1{animation:asp-clip-up 2.8s var(--motion-ease) .50s both}
+body:not(.home):not(.interior) main>h2,
+body:not(.home):not(.interior) main>p:not(:first-child){animation:asp-rise 2.2s var(--motion-ease) .95s both}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}
+}
